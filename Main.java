@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.*;
 import javax.swing.border.*;
  
@@ -80,7 +82,7 @@ public class Main extends JFrame implements ActionListener {
             jPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
             jPanel.setBackground(new Color(32, 32, 32));
             jPanel.add(getNew(), null);
- 
+            jPanel.add(getEx(), null);
         }
         return jPanel;
     }
@@ -92,6 +94,15 @@ public class Main extends JFrame implements ActionListener {
             New.addActionListener(this);
         }
         return New;
+    }
+
+    private JButton getEx() {
+        if (Ex == null) {
+            Ex = new JButton("Exit");
+            Ex.setBackground(new Color(255, 102, 102));
+            Ex.addActionListener(this);
+        }
+        return Ex;
     }
 
     private JPanel getJPanel1() {
@@ -133,6 +144,7 @@ public class Main extends JFrame implements ActionListener {
                 logic.setVinner();				
                 if(logic.getVinner()!=0) {
                     StateGame.setText(TypeCell.vinnerFormatOfState(logic.getVinner()));
+                    inFile(TypeCell.vinnerFormatOfState(logic.getVinner()));
                 }
                 else{
                     logic.setState(logic.tactica(), TypeCell.X);
@@ -140,12 +152,39 @@ public class Main extends JFrame implements ActionListener {
                     int ret = logic.lockWinner();	
                     if(ret>0) {
                         StateGame.setText(TypeCell.vinnerFormatOfState(ret));
+                        inFile(TypeCell.vinnerFormatOfState(ret));
                     }
                 }				
             }
         }
     }
 		
+    private String getStrState(int index) {
+        return String.format("%1s", TypeCell.strFormatOfState(logic.getCell(index)));
+    }
+    
+    private void inFile(String text) {
+        try(FileWriter writer = new FileWriter("filename.txt", false))
+        {
+            StringBuilder str = new StringBuilder();
+            int i = 0;
+            str.append("TicTacToe game:\r\n\r\n\t");
+            str.append(getStrState(i++)).append("|").append(getStrState(i++));
+            str.append("|").append(getStrState(i++));
+            str.append("\r\n\t-|-|-\r\n\t");
+            str.append(getStrState(i++)).append("|").append(getStrState(i++));
+            str.append("|").append(getStrState(i++));
+            str.append("\r\n\t-|-|-\r\n\t");
+            str.append(getStrState(i++)).append("|").append(getStrState(i++));
+            str.append("|").append(getStrState(i++));
+            str.append("\r\n\r\n").append(text);
+            writer.write(str.toString());
+            writer.flush();
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        } 
+    }
     public void setMass()
     {
         for(int i=0; i<9; i++)
