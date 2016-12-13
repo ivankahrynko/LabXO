@@ -15,7 +15,9 @@ public class TicTacToeLogic {
     private void initialize() {
         newGame();
     }
-    
+    public int getCell(int index) {
+        return m[index];
+    }
     public void setCell(int cellIndex, int value) {
         m[cellIndex] = value;
     }
@@ -35,7 +37,7 @@ public class TicTacToeLogic {
                     continue;
                 }
             }
-        if(ButtonsInGame<8){	
+        if(ButtonsInGame<8){
             int res = emptyPole(TypeCell.X);
             if(res!=-1)return res;
                     res = emptyPole(TypeCell.O);
@@ -182,6 +184,7 @@ public class TicTacToeLogic {
         main.setState(index, state);
         ButtonsInGame--;
     }
+    
 
     private int getRand(int lim){
         if(lim<1)return -1;
