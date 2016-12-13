@@ -12,7 +12,7 @@ public class TypeCell {
         if(state==TypeCell.X)return "Win computer";
         if(state==TypeCell.O)return "Win player";
         if(state==2)return "Tandoff";
-
+        if(state==3)return "Unknown";
         return null;
     }
 }
